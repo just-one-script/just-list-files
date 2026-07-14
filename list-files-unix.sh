@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Compatible with Linux and macOS.
+
 set -eu
 
 usage() {
@@ -54,9 +56,15 @@ if [ "$#" -gt 0 ]; then
     exit 2
 fi
 
+script_directory=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
+script_path=$script_directory/$(basename "$0")
+
 if [ -z "$target_directory" ]; then
-    printf 'Enter the directory to list: '
-    IFS= read -r target_directory
+    printf 'Enter the directory to list (press Enter to use the script directory): '
+    IFS= read -r target_directory || target_directory=
+    if [ -z "$target_directory" ]; then
+        target_directory=$script_directory
+    fi
 fi
 
 if [ ! -d "$target_directory" ]; then
@@ -68,7 +76,6 @@ case $target_directory in
     -*) target_directory=./$target_directory ;;
 esac
 
-script_directory=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 target_directory=$(CDPATH= cd "$target_directory" && pwd -P)
 output_path=$script_directory/file-list.txt
 
@@ -87,12 +94,14 @@ trap cleanup EXIT HUP INT TERM
 
 if [ "$recursive" -eq 1 ]; then
     find "$target_directory" -type f \
+        ! -path "$script_path" \
         ! -path "$output_path" \
         ! -path "$raw_list" \
         ! -path "$sorted_list" \
         -exec basename {} \; > "$raw_list"
 else
     find "$target_directory" ! -path "$target_directory" -prune -type f \
+        ! -path "$script_path" \
         ! -path "$output_path" \
         ! -path "$raw_list" \
         ! -path "$sorted_list" \

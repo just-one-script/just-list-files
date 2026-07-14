@@ -11,8 +11,10 @@ the script, regardless of the terminal's current working directory.
   platform-specific commands below.
 - Includes hidden files and sorts the results by file name.
 - Writes file names only, without their directory paths.
-- Uses UTF-8 and excludes `file-list.txt` from the results when necessary.
+- Uses UTF-8 and excludes both `file-list.txt` and the running script from the
+  results.
 - Prompts for the target directory if no directory argument is provided.
+  Press Enter without typing a path to use the directory containing the script.
 
 ## Windows
 
@@ -31,27 +33,27 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\list-files-windows.ps1
 ## Linux
 
 ```sh
-chmod +x list-files-linux.sh
-./list-files-linux.sh "/path/to/directory"
+chmod +x list-files-unix.sh
+./list-files-unix.sh "/path/to/directory"
 ```
 
 List files recursively:
 
 ```sh
-./list-files-linux.sh --recursive "/path/to/directory"
+./list-files-unix.sh --recursive "/path/to/directory"
 ```
 
 ## macOS
 
 ```sh
-chmod +x list-files-macos.sh
-./list-files-macos.sh "/path/to/directory"
+chmod +x list-files-unix.sh
+./list-files-unix.sh "/path/to/directory"
 ```
 
 List files recursively:
 
 ```sh
-./list-files-macos.sh --recursive "/path/to/directory"
+./list-files-unix.sh --recursive "/path/to/directory"
 ```
 
 > Note: The text format uses one file name per line. A file name containing a

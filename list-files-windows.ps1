@@ -10,6 +10,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $outputFileName = 'file-list.txt'
 $scriptDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path
+$scriptPath = [System.IO.Path]::GetFullPath($MyInvocation.MyCommand.Path)
 $outputPath = Join-Path $scriptDirectory $outputFileName
 $temporaryPath = Join-Path $scriptDirectory ('.file-list.{0}.tmp' -f [Guid]::NewGuid())
 
@@ -19,12 +20,11 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($TargetDirectory)) {
-        $TargetDirectory = Read-Host 'Enter the directory to list'
+        $TargetDirectory = Read-Host 'Enter the directory to list (press Enter to use the script directory)'
         $TargetDirectory = $TargetDirectory.Trim().Trim('"')
-    }
-
-    if ([string]::IsNullOrWhiteSpace($TargetDirectory)) {
-        throw 'No target directory was provided.'
+        if ([string]::IsNullOrWhiteSpace($TargetDirectory)) {
+            $TargetDirectory = $scriptDirectory
+        }
     }
 
     $target = Get-Item -LiteralPath $TargetDirectory -Force
@@ -45,10 +45,9 @@ try {
     $names = @(
         Get-ChildItem @getChildItemParameters |
             Where-Object {
-                -not [StringComparer]::OrdinalIgnoreCase.Equals(
-                    [System.IO.Path]::GetFullPath($_.FullName),
-                    $outputFullPath
-                )
+                $fileFullPath = [System.IO.Path]::GetFullPath($_.FullName)
+                (-not [StringComparer]::OrdinalIgnoreCase.Equals($fileFullPath, $outputFullPath)) -and
+                    (-not [StringComparer]::OrdinalIgnoreCase.Equals($fileFullPath, $scriptPath))
             } |
             Sort-Object Name, FullName |
             Select-Object -ExpandProperty Name
