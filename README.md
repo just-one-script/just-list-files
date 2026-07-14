@@ -30,20 +30,7 @@ List files recursively:
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\list-files-windows.ps1 "C:\path to\directory" -Recurse
 ```
 
-## Linux
-
-```sh
-chmod +x list-files-unix.sh
-./list-files-unix.sh "/path/to/directory"
-```
-
-List files recursively:
-
-```sh
-./list-files-unix.sh --recursive "/path/to/directory"
-```
-
-## macOS
+## Linux & macOS
 
 ```sh
 chmod +x list-files-unix.sh
