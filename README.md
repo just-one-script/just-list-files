@@ -43,6 +43,8 @@ List files recursively:
 ./list-files-unix.sh --recursive "/path/to/directory"
 ```
 
-> Note: The text format uses one file name per line. A file name containing a
-> newline character—which is possible but uncommon on Linux and macOS—will
-> occupy multiple lines in the output.
+> [!note] 
+> 
+> The text format uses one file name per line. 
+> A file name containing a newline character (which is possible but uncommon on Linux and macOS) 
+> will occupy multiple lines in the output.
